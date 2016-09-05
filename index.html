@@ -13,7 +13,13 @@
 		//слушатель на изменение мона внутри дергать аджакс вызов но много
 		$(".dial").knob({
         'release' : function (v) { 
-        	console.log(v);}
+		    $.post("http://localhost:8080/post",
+		    {
+		        temp: v
+		    },
+		    function(data, status){
+		        //result
+		    });}
     	});
 
     	$.get("http://localhost:8080/", function(data, status){
