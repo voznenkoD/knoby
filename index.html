@@ -11,15 +11,13 @@
 	</body>
 	<script type="text/javascript">
 		//слушатель на изменение мона внутри дергать аджакс вызов но много
-		 $(".dial").knob({
+		$(".dial").knob({
         'release' : function (v) { 
-        	console.log(v); }
+        	console.log(v);}
     	});
-		 //начальное значение мона дергать функцию гет в начале и передавать сюда значение
-		$('.dial')
-        .val(27)
-        .trigger('change');
 
-    	$.get("http://zeon.kiev.ua/backend.php?get_value=1", function(data, status){
-        alert("Data: " + data + "\nStatus: " + status);});
+    	$.get("http://localhost:8080/", function(data, status){
+        $('.dial')
+        .val(data)
+        .trigger('change');});
 </script>
