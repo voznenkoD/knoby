@@ -10,9 +10,36 @@
 		<input type="text" value="150" class="dial">
 	</body>
 	<script type="text/javascript">
-		//слушатель на изменение мона внутри дергать аджакс вызов но много
+
+		function colorMe(v){
+		    return "rgb(" + conv(v) + "," + (255-conv(v)) + ",0)";
+		}
+
+		function conv(x){
+		    return Math.floor((x - 100) / (1800-100) * 255);
+		}
+
+		function rgb2hex(rgb){
+		 rgb = rgb.match(/^rgb((d+),s*(d+),s*(d+))$/);
+		 return "#" +
+		  ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+		  ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+		  ("0" + parseInt(rgb[3],10).toString(16)).slice(-2);
+		}
+
 		$(".dial").knob({
-        'release' : function (v) { 
+        'change' : function (v) { 
+			    $('.dial').trigger(
+			        'configure',
+			        {
+			            "fgColor":rgb2hex(colorMe(v))
+			        }
+			    );
+        	}
+    	});
+    	
+		$(".dial").knob({
+        'release' : function (v) {
 		    $.post("http://localhost:8080/post",
 		    {
 		        temp: v
@@ -21,6 +48,8 @@
 		        //result
 		    });}
     	});
+
+
 
     	$.get("http://localhost:8080/", function(data, status){
         $('.dial')
