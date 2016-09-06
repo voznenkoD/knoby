@@ -11,6 +11,8 @@
 	</body>
 <script type="text/javascript">
 
+		var host = "http://" + window.location.host;
+
 		function colorMe(z){
 		    return "rgb(" + conv(z) + "," + (255-conv(z)) + ",0)";
 		}
@@ -31,7 +33,7 @@
 
 		$(".dial").knob({
         	'release' : function (v) {
-		    	$.post("http://localhost:9090/post",
+		    	$.post(host + "/post",
 		    	{
 		        	temp: v
 		    	},
@@ -48,9 +50,7 @@
         	}
     	});
 
-
-
-    	$.get("http://localhost:9090/", function(data, status){
+    	$.get(host, function(data, status){
         $('.dial')
         .val(data)
         .trigger('change');
