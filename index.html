@@ -9,18 +9,19 @@
 	<body> 
 		<input type="text" value="150" class="dial">
 	</body>
-	<script type="text/javascript">
+<script type="text/javascript">
 
-		function colorMe(v){
-		    return "rgb(" + conv(v) + "," + (255-conv(v)) + ",0)";
+		function colorMe(z){
+		    return "rgb(" + conv(z) + "," + (255-conv(z)) + ",0)";
 		}
 
 		function conv(x){
-		    return Math.floor((x) / (1800-100) * 255);
+		    return Math.floor(x*255/100);
 		}
 
 		function rgb2hex(rgb){
 		 var re = /rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/;
+		 console.log(rgb);
 		 rgb = rgb.match(re);
 		 return "#" +
 		  ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
@@ -29,7 +30,15 @@
 		}
 
 		$(".dial").knob({
-        'change' : function (v) { 
+        	'release' : function (v) {
+		    	$.post("http://localhost:9090/post",
+		    	{
+		        	temp: v
+		    	},
+		    	function(data, status){
+		        //result
+		    });},
+		    'change' : function (v) { 
 			    $('.dial').trigger(
 			        'configure',
 			        {
@@ -39,21 +48,13 @@
         	}
     	});
 
-		$(".dial").knob({
-        'release' : function (v) {
-		    $.post("http://localhost:8080/post",
-		    {
-		        temp: v
-		    },
-		    function(data, status){
-		        //result
-		    });}
-    	});
 
 
-
-    	$.get("http://localhost:8080/", function(data, status){
+    	$.get("http://localhost:9090/", function(data, status){
         $('.dial')
         .val(data)
-        .trigger('change');});
+        .trigger('change');
+        $('.dial')
+        .trigger('configure', {"fgColor":rgb2hex(colorMe(data))});
+    	});
 </script>
