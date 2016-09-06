@@ -12,13 +12,16 @@
 <script type="text/javascript">
 
 		var host = "http://" + window.location.host;
+		var maxValue = 40;
+
+		init();
 
 		function colorMe(z){
 		    return "rgb(" + conv(z) + "," + (255-conv(z)) + ",0)";
 		}
 
 		function conv(x){
-		    return Math.floor(x*255/100);
+		    return Math.floor(x*255/maxValue);
 		}
 
 		function rgb2hex(rgb){
@@ -44,17 +47,25 @@
 			    $('.dial').trigger(
 			        'configure',
 			        {
-			            "fgColor":rgb2hex(colorMe(v))
+			            "fgColor":rgb2hex(colorMe(v)),
+			            "inputColor":rgb2hex(colorMe(v))
 			        }
 			    );
         	}
     	});
 
-    	$.get(host, function(data, status){
-        $('.dial')
-        .val(data)
-        .trigger('change');
-        $('.dial')
-        .trigger('configure', {"fgColor":rgb2hex(colorMe(data))});
-    	});
+		function init() {
+	    	$.get(host, function(data, status){
+		        $('.dial')
+		        .val(data)
+		        .trigger('change');
+		        $('.dial')
+		        .trigger('configure', {
+		        	"fgColor":rgb2hex(colorMe(data)),
+			        "min":0,
+			        "max":maxValue,
+			        "inputColor":rgb2hex(colorMe(data))
+		        });
+	    	});
+		}
 </script>
